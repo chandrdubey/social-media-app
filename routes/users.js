@@ -1,7 +1,8 @@
 const router = require('express').Router();
 
 const usersController = require('../controllers/users');
-//router.post('/users/new',)
 
+router.post('/new', usersController.signup);
+router.post('/', usersController.getAllUsers);
 
 module.exports = router;
