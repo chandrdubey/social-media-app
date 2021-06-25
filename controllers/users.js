@@ -5,6 +5,7 @@ const pool = require('../config/postgres');
 //     .catch(err => console.log(err))
 const admins_id = 1;
 module.exports = {
+    // Signup the user
     signup : ( req, res)=>{
         const {name , email, active, mobile_number } = req.body;
         pool.query(
