@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const postsController = require('../controllers/posts');
+const commentsController = require('../controllers/comments');
 const admin_id = 1;
 // checkAdmin = (req, res, next) => {
 //     if(parseInt(req.body.id) === admin_id ){
@@ -16,5 +17,6 @@ router.get('/archive',postsController.archivePosts);
 router.put('/:post_id/edit', postsController.editPost);
 router.delete('/:post_id/delete', postsController.postDeletePermanent);
 router.put('/:post_id/toggle-like', postsController.postLikeOrUnlike);
+router.get('/:post_id/comments', commentsController.postComments);
 
 module.exports = router;

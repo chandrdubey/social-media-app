@@ -39,9 +39,8 @@ module.exports = {
 
     editPost: (req, res) =>{
         const {post_id} = req.params;
-        console.log(req.body);
+       // console.log(req.body);
         pool.query("SELECT * FROM posts WHERE post_id=$1",[post_id])
-       
         .then(result =>{
             if(result.rows.length>0){
                 const currActive = result.rows[0].active ? 0 : 1;
