@@ -10,5 +10,8 @@
             "username": "roll",
             "database": "postgres"
         }
-    ]
+    ],
+    "files.associations": {
+        "cstdlib": "cpp"
+    }
 }
