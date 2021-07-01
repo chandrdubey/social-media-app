@@ -35,7 +35,7 @@ module.exports = {
         );
         // console.log(JWT_SECRET);
         // Creating JWT token using user's id
-        const token = jwt.sign({ user_id: result.rows[0].id }, JWT_SECRET, {
+        const token = jwt.sign({id: result.rows[0].id }, JWT_SECRET, {
           expiresIn: "2d",
         });
         res.status(200).json({
@@ -166,22 +166,16 @@ module.exports = {
   },
   // DELETE user data permanently
   userDeletePermanent: (req, res) => {
-    const { user_id } = req.body;
-    console.log(id);
-    if (parseInt(id) === admins_id) {
-      pool
-        .query("DELETE FROM users WHERE id=$1 RETURNING*", [req.params.user_id])
+    
+        pool.query("DELETE FROM users WHERE id=$1 RETURNING*", [req.params.user_id])
         .then((result) =>
-          res
-            .status(200)
+          res.status(200)
             .json({
               result: result.rows[0],
               message: "User Deleted Succesfulley",
             })
         )
         .catch((err) => console.error(err));
-    } else {
-      res.status(401).json({ message: "Unautherized request" });
-    }
-  },
+   
+  }
 };
