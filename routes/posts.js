@@ -2,14 +2,7 @@ const router = require('express').Router();
 
 const postsController = require('../controllers/posts');
 const commentsController = require('../controllers/comments');
-const admin_id = 1;
-// checkAdmin = (req, res, next) => {
-//     if(parseInt(req.body.id) === admin_id ){
-//         next();
-//     }else{
-//         return res.status(401).json({message: 'unauthorized request'});
-//     }
-// }
+
 
 router.post('/new',postsController.newPost);
 router.get('/', postsController.getAllPosts);

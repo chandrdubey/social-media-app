@@ -5,7 +5,8 @@ const commentRoutes = require('./comments');
 
 router.use('/users', userRoutes);
 router.use('/posts', postRoutes);
-router.use('/posts/:post_id/comments', commentRoutes)
+router.use('/posts/:post_id/comments', commentRoutes);
+
 // router.get('/', (req, res) => {
 //     console.log('hello');
 // })

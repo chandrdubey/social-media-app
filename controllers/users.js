@@ -54,8 +54,55 @@ module.exports = {
     }
   },
 
-  signin: (req, res)=>{
-
+  signin: async(req, res)=>{
+    try {
+        const { email, password } = req.body;
+        //Validating the signup schema
+        const { error, value } = await userValidation.signin(req.body);
+  
+        if (error) {
+          return res.status(404).json({ message: error.details[0].message });
+        }
+        //Checking if a user already present in the database or not
+        const result = await pool.query("SELECT * FROM users where email=$1", [
+          email,
+        ]);
+        // If it is present , return status 404 with messeage
+        if (result.rows.length == 0) {
+          return res.status(404).json({ message: "Email does not exist" });
+        }
+        // If it is not, verify password
+        else {
+            //checking password
+            const validPassword = await bcrypt.compare(
+             password,
+             result.rows[0].password
+             );
+           if (!validPassword) {
+               console.log("Wrong password");
+               return res.status(404).json({
+               message: "Wrong password"
+               });
+           }
+          // console.log(JWT_SECRET);
+          // Creating JWT token using user's id
+          const token = jwt.sign({id: result.rows[0].id }, JWT_SECRET, {
+            expiresIn: "2d",
+          });
+          res.status(200).json({
+            token,
+            data: {
+              user_detail: {
+                user_id: result.rows[0].id,
+                email: result.rows[0].email,
+                name: result.rows[0].name,
+              },
+            },
+          });
+        }
+      } catch (err) {
+        console.log(`there is an error ${err}`);
+      }
   },
 
   // GET request for all the users
@@ -119,7 +166,7 @@ module.exports = {
   },
   // DELETE user data permanently
   userDeletePermanent: (req, res) => {
-    const { id } = req.body;
+    const { user_id } = req.body;
     console.log(id);
     if (parseInt(id) === admins_id) {
       pool
