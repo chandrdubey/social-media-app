@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const usersController = require('../controllers/users');
-const admin_id = 1;
+//const admin_id = 1;
 checkAdmin = (req, res, next) => {
     if(parseInt(req.body.id) === admin_id ){
         next();

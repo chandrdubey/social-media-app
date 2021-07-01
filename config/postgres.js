@@ -1,11 +1,15 @@
 const { Pool} = require('pg');
-
+const {DATABASE_USER,
+  DATABASE_HOST,
+  DATABASE_NAME,
+  DATABASE_PASSWORD,
+  DATABASE_PORT} = require('./');
 const pool = new Pool({
-    user: "roll",
-    host: "localhost",
-    database: "social",
-    password: "password",
-    port: 5432,
+    user: DATABASE_USER,
+    host: DATABASE_HOST,
+    database: DATABASE_NAME,
+    password: DATABASE_PASSWORD,
+    port: DATABASE_PORT,
   });
 
   pool.connect()
