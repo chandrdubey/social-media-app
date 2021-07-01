@@ -1,9 +1,10 @@
 const pool = require('../config/postgres');
-
+const postValidation = require("../validations/postValidation");
 module.exports = {
-    postComments: (req, res) => {
+    postAllComments: (req, res) => {
         const { post_id } = req.params;
        // console.log(post_id);
+       
         pool.query("SELECT * FROM comments WHERE post_id = $1", [post_id])
             .then(result => {
                 res.status(200).json({ result: result.rows });
@@ -14,7 +15,12 @@ module.exports = {
     },
     newComment: (req, res) => {
         const { content, author_id, post_id } = req.body;
-        //    console.log(content, post_id, author_id);
+        //Validating the comment schema
+        const { error, value } = postValidation.comment({content});
+  
+        if (error) {
+          return res.status(404).json({ message: error.details[0].message });
+        }
         pool.query(
             "INSERT INTO comments (content, post_id ,author_id) VALUES ($1, $2 , $3)",
             [content, post_id, author_id])

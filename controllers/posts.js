@@ -1,9 +1,14 @@
 const pool = require('../config/postgres');
-
+const postValidation = require("../validations/postValidation");
 module.exports = {
     newPost : ( req, res)=>{
         const {title , content, author_id} = req.body;
-       // console.log(req.body);
+        //Validating the post schema
+        const { error, value } = postValidation.post({title, content});
+  
+        if (error) {
+          return res.status(404).json({ message: error.details[0].message });
+        }
         pool.query(
             "INSERT INTO posts (title, content, author_id) VALUES ($1, $2 , $3)",
             [title, content, author_id],)
