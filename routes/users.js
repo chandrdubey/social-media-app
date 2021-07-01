@@ -10,7 +10,7 @@ checkAdmin = (req, res, next) => {
     }
 }
 
-router.post('/new', usersController.signup);
+router.post('/signup', usersController.signup);
 router.get('/', usersController.getAllUsers);
 router.get('/active', usersController.activeUsers);
 router.get('/:user_id', usersController.getUserById);

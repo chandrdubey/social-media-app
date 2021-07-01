@@ -1,10 +1,9 @@
 const pool = require('../config/postgres');
 
 module.exports = {
-
     postComments: (req, res) => {
         const { post_id } = req.params;
-        console.log(post_id);
+       // console.log(post_id);
         pool.query("SELECT * FROM comments WHERE post_id = $1", [post_id])
             .then(result => {
                 res.status(200).json({ result: result.rows });
@@ -13,7 +12,6 @@ module.exports = {
                 console.log(`there is an err ${err}`);
             })
     },
-
     newComment: (req, res) => {
         const { content, author_id, post_id } = req.body;
         //    console.log(content, post_id, author_id);

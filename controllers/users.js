@@ -1,4 +1,5 @@
 const pool = require('../config/postgres');
+const userValidation = require('../validations/userValidation');
 // pool.query(
 //     "SELECT * FROM users;")
 //     .then(result => console.log(result.rows))
@@ -6,13 +7,23 @@ const pool = require('../config/postgres');
 const admins_id = 1;
 module.exports = {
     // Signup the user
-    signup : ( req, res)=>{
-        const {name , email, active, mobile_number } = req.body;
-        pool.query(
-            "INSERT INTO users (active,name,email,mobile_number) VALUES ($1, $2 ,$3 ,$4)",
-            [active, name, email, mobile_number],)
-            .then(result => res.status(200).json({message: "user signup successful"}))
-            .catch(err => console.log(`there is an error ${err}`))
+    signup : async ( req, res)=>{
+        try{
+            const {name , email, password, repeat_password} = req.body;
+            const  {err, data} = await userValidation.signup(req.body);
+            console.log(req.body);
+            // console.log( "there is ean error"+data, err);
+    
+            // pool.query(
+            //     "INSERT INTO users (active,name,email,mobile_number) VALUES ($1, $2 ,$3 ,$4)",
+            //     [active, name, email, mobile_number],)
+            //     .then(result => res.status(200).json({message: "user signup successful"}))
+            //     .catch(err => console.log(`there is an error ${err}`))
+        }
+        catch(err){
+            console.log(`there is an error ${err}`);
+        }
+       
     },
     
     // GET request for all the users 
