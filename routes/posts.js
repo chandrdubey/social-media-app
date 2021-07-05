@@ -2,8 +2,10 @@ const router = require('express').Router();
 const postsController = require('../controllers/posts');
 const commentsController = require('../controllers/comments');
 const passport = require('passport');
+const upload = require('../middlewares/uploads');
 
-router.post('/new',passport.authenticate('jwt', { session: false }), postsController.newPost);
+
+router.post('/new',[passport.authenticate('jwt', { session: false }), upload.array('photos', 4)], postsController.newPost);
 router.get('/', postsController.getAllPosts);
 router.get('/archive', passport.authenticate('jwt', { session: false }),postsController.archivePosts);
 router.put('/:post_id/edit',passport.authenticate('jwt', { session: false }), postsController.editPost);

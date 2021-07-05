@@ -12,6 +12,7 @@
         }
     ],
     "files.associations": {
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "iostream": "cpp"
     }
 }

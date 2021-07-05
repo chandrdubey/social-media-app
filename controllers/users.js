@@ -49,8 +49,9 @@ module.exports = {
           },
         });
       }
-    } catch (err) {
+    }catch (err) {
       console.log(`there is an error ${err}`);
+      return res.status(404).json({ message: err });
     }
   },
 
@@ -102,6 +103,7 @@ module.exports = {
         }
       } catch (err) {
         console.log(`there is an error ${err}`);
+        return res.status(404).json({ message: err });
       }
   },
 
@@ -153,7 +155,8 @@ module.exports = {
       if (result.rows.length > 0) {
         if (result.rows[0].active) {
           pool
-            .query("UPDATE users SET active=$1 WHERE id=$2", [0, user_id])
+            // .query("UPDATE users SET active=$1 WHERE id=$2", [0, user_id])
+            .query(`UPDATE users SET active=0 WHERE id= '${user_id}'`)
             .then(() => res.status(200).json({ message: "ok" }))
             .catch((err) => console.error(err));
         } else {
@@ -177,5 +180,24 @@ module.exports = {
         )
         .catch((err) => console.error(err));
    
+  },
+  userAllPosts: (req, res)=>{
+        const user_id = req.params.user_id;
+        const allPostsOfUserWithImages =[];
+        pool.query('SELECT * FROM posts where author_id=$1',[user_id])
+        .then(result =>{
+           result.rows.map(post =>{
+             pool.query('SELECT image FROM images post_id=$1',[post.post_id])
+             .then(allImages =>{
+                  allPostsOfUserWithImages.push({post:post, images:allImages});
+             })
+             .catch(err=>{
+                res.status(404).json({message:err});
+             })
+           })
+        })
+        .catch(err=>{
+          res.status(404).json({message:err});
+        })
   }
 };
